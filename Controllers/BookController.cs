@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BookstoreApi.Communication.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookstoreApi.Controllers;
@@ -44,6 +45,22 @@ public class BookController : ControllerBase
         if(isExistBook == null) return NotFound("ID does not exist!");
 
         return Ok(isExistBook);
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public IActionResult DeleteBook([FromRoute]int id)
+    {
+        var book = books.FirstOrDefault(b => b.Id == id);
+
+        if (book == null) return NotFound("ID does not exist!");
+
+        books.Remove(book);
+
+        var response = new ResponseDeleteBookJson { id = book.Id };
+
+        return Ok(response);
     }
 
 
