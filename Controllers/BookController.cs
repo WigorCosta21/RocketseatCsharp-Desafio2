@@ -45,7 +45,7 @@ public class BookController : ControllerBase
     {
         var isExistBook = books.FirstOrDefault(book => book.Id == id); 
 
-        if(isExistBook == null) return NotFound("ID does not exist!");
+        if(isExistBook == null) return NotFound("Book not found!");
 
         return Ok(isExistBook);
     }
@@ -57,7 +57,7 @@ public class BookController : ControllerBase
     {
         var book = books.FirstOrDefault(b => b.Id == id);
 
-        if (book == null) return NotFound("ID does not exist!");
+        if (book == null) return NotFound("Book not found!");
 
         books.Remove(book);
 
@@ -68,6 +68,7 @@ public class BookController : ControllerBase
 
     [HttpPut]
     [Route("{id}")]
+    [ProducesResponseType(typeof (Book), StatusCodes.Status200OK)]
     public IActionResult UpdateBook(
         [FromRoute] int id,
         [FromBody] RequestUpdateBookJson request
