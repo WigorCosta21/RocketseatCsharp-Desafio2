@@ -91,9 +91,9 @@ public class BookController : ControllerBase
 
                 break;
 
-            case var _ when !string.IsNullOrWhiteSpace(request.Gender):
+            case var _ when request.Gender.Any():
 
-                book.Author = request.Author;
+                book.Gender = request.Gender;
 
                 break;
 
