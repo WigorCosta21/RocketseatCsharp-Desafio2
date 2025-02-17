@@ -1,6 +1,6 @@
 ﻿namespace BookstoreApi.Communication.Response;
 
-public class ResponseDeleteBookJson
+public class ResponseItemBookJson
 {
     public int id {  get; set; }
 }

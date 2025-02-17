@@ -1,5 +1,5 @@
-﻿using BookstoreApi.Communication.Response;
-using Microsoft.AspNetCore.Http;
+﻿using BookstoreApi.Communication.Request;
+using BookstoreApi.Communication.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookstoreApi.Controllers;
@@ -24,7 +24,10 @@ public class BookController : ControllerBase
 
         books.Add(book);
 
-        return Created(string.Empty, book);
+        var response = new ResponseItemBookJson { id = book.Id };
+
+
+        return Created(string.Empty, response);
     }
 
     [HttpGet]
@@ -58,10 +61,58 @@ public class BookController : ControllerBase
 
         books.Remove(book);
 
-        var response = new ResponseDeleteBookJson { id = book.Id };
+        var response = new ResponseItemBookJson { id = book.Id };
 
         return Ok(response);
     }
 
+    [HttpPut]
+    [Route("{id}")]
+    public IActionResult UpdateBook(
+        [FromRoute] int id,
+        [FromBody] RequestUpdateBookJson request
+        )
+    {
+        var book = books.FirstOrDefault(b => b.Id == id);
+
+        if (book == null) return NotFound("Book not found!");
+
+        switch(request)
+        {
+            case var _ when !string.IsNullOrWhiteSpace(request.Title):
+
+                book.Title = request.Title;
+
+                break;
+
+            case var _ when !string.IsNullOrWhiteSpace(request.Author):
+
+                book.Author = request.Author;
+
+                break;
+
+            case var _ when !string.IsNullOrWhiteSpace(request.Gender):
+
+                book.Author = request.Author;
+
+                break;
+
+            case var _ when request.Price > 0:
+
+                book.Price = request.Price;
+
+                break;
+
+            case var _ when request.Quantity >= 0:
+
+                book.Quantity = request.Quantity;
+
+                break;
+        }
+
+        var response = new ResponseItemBookJson { id = book.Id };
+
+        return Ok(response);
+    }
 
 }
