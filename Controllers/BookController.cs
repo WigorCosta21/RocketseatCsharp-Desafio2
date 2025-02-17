@@ -25,6 +25,26 @@ public class BookController : ControllerBase
 
         return Created(string.Empty, book);
     }
-    
+
+    [HttpGet]
+    [ProducesResponseType(typeof(Book), StatusCodes.Status200OK)]
+    public IActionResult GetAllBook()
+    {
+        if (books.Count == 0) return NoContent();
+
+        return Ok(books);
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    public IActionResult GetBookById([FromRoute] int id)
+    {
+        var isExistBook = books.FirstOrDefault(book => book.Id == id); 
+
+        if(isExistBook == null) return NotFound("ID does not exist!");
+
+        return Ok(isExistBook);
+    }
+
 
 }
